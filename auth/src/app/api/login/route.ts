@@ -23,6 +23,7 @@ export async function POST(request: NextRequest) {
     }
     const tokenData = {
       id: user._id,
+      name: user._name,
       email: user.email,
       avatar: user.avatar,
     }
