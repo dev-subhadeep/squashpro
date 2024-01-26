@@ -13,6 +13,15 @@ const ReportNewBug = () => {
   const [title, setTitle] = useState("")
   const [description, setDescription] = useState("")
   const [severity, setSeverity] = useState("")
+  const [source, setSource] = useState("")
+  const [isUploading, setIsUploading] = useState(false)
+
+  //Cloudinary
+  const preset_key = process.env.CLOUDINARY_UPLOAD_PRESET!
+  const cloudname = process.env.CLOUDINARY_NAME!
+  const cloudinary_url =
+    "https://api.cloudinary.com/v1_1/" + "dziwovj79" + "/image/upload"
+
   const handleFormSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     try {
@@ -22,13 +31,32 @@ const ReportNewBug = () => {
         title,
         description,
         severity,
+        source,
         raised_by: user.id,
       }
-      console.log(data)
+      const postBugReportResponse = await axios.post("/api/bugs", data)
+      console.log(postBugReportResponse)
     } catch (error: any) {
       console.log(error.message)
     }
   }
+
+  const handleMediaUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0] || ""
+    const formData = new FormData()
+    formData.append("file", file)
+    formData.append("upload_preset", "dfouv8ug")
+    setIsUploading(true)
+    axios
+      .post(cloudinary_url, formData)
+      .then((res) => {
+        console.log(res.data.secure_url)
+        setSource(res.data.secure_url)
+      })
+      .catch((error) => console.log(error.message))
+      .finally(() => setIsUploading(false))
+  }
+
   return (
     <div>
       <h1>Report New Bug</h1>
@@ -56,9 +84,25 @@ const ReportNewBug = () => {
           <option value="Low">Low</option>
         </select>
         <div>
-          <button type="submit">Report</button>
+          <div>
+            <button>
+              <label htmlFor="source">Upload</label>
+            </button>
+          </div>
+          <input
+            type="file"
+            id="source"
+            disabled={isUploading}
+            onChange={handleMediaUpload}
+          />
+        </div>
+        <div>
+          <button disabled={isUploading} type="submit">
+            Report
+          </button>
         </div>
       </form>
+      <div>{source && <img src={source} />}</div>
     </div>
   )
 }
