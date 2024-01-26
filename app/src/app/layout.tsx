@@ -1,12 +1,13 @@
 import type { Metadata } from "next"
 import { Inter } from "next/font/google"
 import "./globals.css"
+import SideMenu from "@/components/SideMenu"
 
 const inter = Inter({ subsets: ["latin"] })
 
 export const metadata: Metadata = {
   title: "SquashPro",
-  description: "Track bugs, squash them and chat with your peers.",
+  description: "Report bugs. Squash them and chat with your peers",
 }
 
 export default function RootLayout({
@@ -16,7 +17,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={inter.className}>{children}</body>
+      <body className="flex flex-row">
+        <SideMenu />
+        <div className="ml-[90px]">{children}</div>
+      </body>
     </html>
   )
 }
