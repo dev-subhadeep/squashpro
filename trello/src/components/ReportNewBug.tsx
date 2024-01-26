@@ -2,6 +2,7 @@
 
 import axios from "axios"
 import React, { useContext, useState } from "react"
+import { useSearchParams } from "next/navigation"
 
 type TUser = {
   id: string
@@ -12,7 +13,9 @@ type TUser = {
 const ReportNewBug = () => {
   const [title, setTitle] = useState("")
   const [description, setDescription] = useState("")
-  const [severity, setSeverity] = useState("")
+  // const [severity, setSeverity] = useState("")
+  const searchParams = useSearchParams()
+  const severity = searchParams.get("severity")
   const [source, setSource] = useState("")
   const [isUploading, setIsUploading] = useState(false)
 
@@ -38,7 +41,7 @@ const ReportNewBug = () => {
       console.log(postBugReportResponse)
       setTitle("")
       setDescription("")
-      setSeverity("")
+      // setSeverity("")
       setSource("")
     } catch (error: any) {
       console.log(error)
@@ -77,7 +80,7 @@ const ReportNewBug = () => {
           onChange={(e) => setDescription(e.target.value)}
         ></textarea>
 
-        <select
+        {/* <select
           value={severity}
           id="severity"
           onChange={(e) => setSeverity(e.target.value)}
@@ -87,7 +90,7 @@ const ReportNewBug = () => {
           <option value="Major">Major</option>
           <option value="Medium">Medium</option>
           <option value="Low">Low</option>
-        </select>
+        </select> */}
         <div>
           <div>
             <button>
