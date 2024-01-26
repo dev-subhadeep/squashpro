@@ -1,10 +1,13 @@
+"use client"
 import ReportNewBug from "@/components/ReportNewBug"
-import React from "react"
+import React, { Suspense } from "react"
 
 const ReportBugPage = () => {
   return (
     <div>
-      <ReportNewBug />
+      <Suspense>
+        <ReportNewBug />
+      </Suspense>
     </div>
   )
 }
