@@ -3,8 +3,9 @@ import SampleImage from "../../public/sample/rachael.jpg"
 import MessageCard from "./MessageCard"
 import OnlineStatusIcon from "./icons/OnlineStatusIcon"
 import { Button } from "./ui/button"
-import AttachmentIcon from "./icons/AttachmentIcon"
+import AttachmentIcon from "../../public/icons/attachment-icon.svg"
 import SendMessageIcon from "./icons/SendMessageIcon"
+import Image from "next/image"
 
 const CurrentChat = () => {
   return (
@@ -21,7 +22,12 @@ const CurrentChat = () => {
       </div>
       <div id="message-box" className="flex flex-row">
         <Button variant="ghost">
-          <AttachmentIcon />
+          <Image
+            src={AttachmentIcon}
+            height={24}
+            width={24}
+            alt="attach files"
+          />
         </Button>
         <div className="flex flex-row border-2 border-slate-300 px-4 py-2 rounded-lg w-9/12">
           <input type="text" className="outline-none w-full" />

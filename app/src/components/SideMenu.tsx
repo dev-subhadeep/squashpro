@@ -6,9 +6,9 @@ import { CalendarIcon, HomeIcon, SearchIcon } from "lucide-react"
 import MessagesIcon from "./icons/MessagesIcon"
 import ThirdIcon from "./icons/ThirdIcon"
 
-const ChatQuickMenu = () => {
+const SideMenu = () => {
   return (
-    <div className="flex flex-col shadow-xl p-4 w-[90px] h-screen sticky top-0 gap-[32px]">
+    <div className="flex flex-col shadow-xl p-4 w-[90px] h-screen fixed top-0 gap-[32px]">
       <div id="logo">
         {/* <Image src={Logo} height={56} width={56} alt="SquashPro logo" /> */}
         <div
@@ -37,4 +37,4 @@ const ChatQuickMenu = () => {
   )
 }
 
-export default ChatQuickMenu
+export default SideMenu

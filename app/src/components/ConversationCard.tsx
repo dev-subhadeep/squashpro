@@ -1,40 +1,58 @@
-import Image, { StaticImageData } from "next/image"
-import React from "react"
+import axios from "axios"
+import Image from "next/image"
+import React, { useEffect, useState } from "react"
+import SampleImage from "../../public/sample/rachael.jpg"
 
 type ConvoCard = {
-  image: string | StaticImageData
-  name: string
-  time: string
-  message: string
+  id: string
   active?: boolean
 }
 
-const ConversationCard = ({
-  image,
-  name,
-  time,
-  message,
-  active,
-}: ConvoCard) => {
-  const css = active === true ? " bg-slate-100" : ""
+type User = {
+  _id: string
+  name: string
+  avatar?: string
+}
+
+const ConversationCard = ({ id, active }: ConvoCard) => {
+  const [user, setUser] = useState<User | null>(null)
+
+  useEffect(() => {
+    axios
+      .get(`/api/user/${id}`)
+      .then((res) => setUser(res.data))
+      .catch((err) => console.log(err))
+  }, [id])
+
+  const css = active ? " bg-slate-100" : ""
+
   return (
-    <div className={"flex flex-row gap-4 rounded-2xl p-4" + css}>
+    <div
+      className={"flex flex-row gap-4 rounded-2xl p-4 hover:bg-slate-100" + css}
+    >
       <div>
-        <Image
-          src={image}
-          alt="name"
-          height={48}
-          width={48}
-          className="rounded-full"
-        />
+        {user?.avatar ? (
+          <Image
+            src={user.avatar}
+            alt={user.name}
+            height={48}
+            width={48}
+            className="rounded-full"
+          />
+        ) : (
+          <Image
+            src={SampleImage}
+            alt="No avatar"
+            height={48}
+            width={48}
+            className="rounded-full"
+          />
+        )}
       </div>
       <div>
-        <h1 className="font-bold">{name}</h1>
-        <p className="text-slate-400 text-sm">{message.slice(0, 20)}</p>
+        <h1 className="font-bold">{user?.name}</h1>
       </div>
-      <div>
-        <p className="text-slate-400 font-bold">{time}</p>
-      </div>
+      <div>{/* <p className="text-slate-400 font-bold">12 min</p> */}</div>
     </div>
   )
 }

@@ -7,7 +7,7 @@ import LogoutButton from "./LogoutButton"
 
 const Header = () => {
   return (
-    <header className="flex flex-row px-2 py-4">
+    <header className="flex flex-row px-2 py-4 justify-between">
       <div id="logo" className="flex flex-row items-center gap-2 mx-4">
         <Image src={Logo} alt="SquashPro Logo" height={30} width={30} />
         <h1 className="text-xl">SquashPro</h1>
