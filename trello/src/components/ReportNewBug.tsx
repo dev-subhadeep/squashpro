@@ -36,8 +36,12 @@ const ReportNewBug = () => {
       }
       const postBugReportResponse = await axios.post("/api/bugs", data)
       console.log(postBugReportResponse)
+      setTitle("")
+      setDescription("")
+      setSeverity("")
+      setSource("")
     } catch (error: any) {
-      console.log(error.message)
+      console.log(error)
     }
   }
 
@@ -72,12 +76,13 @@ const ReportNewBug = () => {
           placeholder="description"
           onChange={(e) => setDescription(e.target.value)}
         ></textarea>
-        <label htmlFor="severity">Choose Severity</label>
+
         <select
           value={severity}
           id="severity"
           onChange={(e) => setSeverity(e.target.value)}
         >
+          <option value="">Choose Severity</option>
           <option value="Critical">Critical</option>
           <option value="Major">Major</option>
           <option value="Medium">Medium</option>
