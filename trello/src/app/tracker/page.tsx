@@ -16,7 +16,11 @@ type TBug = {
 }
 
 const TrackerPage = () => {
-  return <BugTracker />
+  return (
+    <div className="flex flex-row justify-center my-[10%]">
+      <BugTracker />
+    </div>
+  )
 }
 
 export default TrackerPage

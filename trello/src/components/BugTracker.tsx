@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react"
 import axios from "axios"
 import BugCardsContainer from "./BugCardsContainer"
 import BugCard from "./BugCard"
+import { DragDropContext } from "react-beautiful-dnd"
 
 type TBug = {
   _id: string
@@ -14,56 +15,55 @@ type TBug = {
 }
 
 const BugTracker = () => {
-  const [bugs, setBugs] = useState<[TBug]>()
+  const [isLoading, setIsloading] = useState(false)
+  const [criticalBugs, setCriticalBugs] = useState<[TBug]>()
+  const [majorBugs, setMajorBugs] = useState<[TBug]>()
+  const [mediumBugs, setMediumBugs] = useState<[TBug]>()
+  const [lowBugs, setLowBugs] = useState<[TBug]>()
   useEffect(() => {
     axios.get("/api/bugs").then((res) => {
-      setBugs(res.data)
+      setCriticalBugs(
+        res.data.filter((bug: TBug) => bug.severity === "Critical")
+      )
+      setMajorBugs(res.data.filter((bug: TBug) => bug.severity === "Major"))
+      setMediumBugs(res.data.filter((bug: TBug) => bug.severity === "Medium"))
+      setLowBugs(res.data.filter((bug: TBug) => bug.severity === "Low"))
     })
   }, [])
   return (
     <div className="flex flex-row gap-4 justify-center">
-      <div>
-        <h1>Critical Severity</h1>
-        <BugCardsContainer variant="Critical">
-          {bugs
-            ?.filter((bug) => bug.severity === "Critical")
-            .map((bug) => (
+      <DragDropContext onDragEnd={() => {}}>
+        <div>
+          <BugCardsContainer variant="Critical">
+            {criticalBugs?.map((bug) => (
               <BugCard key={bug._id} {...bug} />
             ))}
-        </BugCardsContainer>
-      </div>
+          </BugCardsContainer>
+        </div>
 
-      <div>
-        <h1>Major Severity</h1>
-        <BugCardsContainer variant="Major">
-          {bugs
-            ?.filter((bug) => bug.severity === "Major")
-            .map((bug) => (
+        <div>
+          <BugCardsContainer variant="Major">
+            {majorBugs?.map((bug) => (
               <BugCard key={bug._id} {...bug} />
             ))}
-        </BugCardsContainer>
-      </div>
+          </BugCardsContainer>
+        </div>
 
-      <div>
-        <h1>Medium Severity</h1>
-        <BugCardsContainer variant="Medium">
-          {bugs
-            ?.filter((bug) => bug.severity === "Medium")
-            .map((bug) => (
+        <div>
+          <BugCardsContainer variant="Medium">
+            {mediumBugs?.map((bug) => (
               <BugCard key={bug._id} {...bug} />
             ))}
-        </BugCardsContainer>
-      </div>
-      <div>
-        <h1>Low Severity</h1>
-        <BugCardsContainer variant="Low">
-          {bugs
-            ?.filter((bug) => bug.severity === "Low")
-            .map((bug) => (
+          </BugCardsContainer>
+        </div>
+        <div>
+          <BugCardsContainer variant="Low">
+            {lowBugs?.map((bug) => (
               <BugCard key={bug._id} {...bug} />
             ))}
-        </BugCardsContainer>
-      </div>
+          </BugCardsContainer>
+        </div>
+      </DragDropContext>
     </div>
   )
 }
