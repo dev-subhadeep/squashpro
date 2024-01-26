@@ -25,5 +25,6 @@ export const config = {
     "/profile/:path*",
     "/auth/:path*",
     "/tracker/:path*",
+    "/chat/:path*",
   ],
 }
