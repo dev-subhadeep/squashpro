@@ -1,5 +1,7 @@
 "use client"
 
+import BugCard from "@/components/BugCard"
+import BugTracker from "@/components/BugTracker"
 import axios from "axios"
 import React, { useEffect, useState } from "react"
 
@@ -14,26 +16,7 @@ type TBug = {
 }
 
 const TrackerPage = () => {
-  const [bugs, setBugs] = useState<[TBug]>()
-  useEffect(() => {
-    axios.get("/api/bugs").then((res) => {
-      setBugs(res.data)
-    })
-  }, [])
-  return (
-    <div>
-      <h1>Tracker Page</h1>
-
-      <div>
-        {bugs?.map((bug) => (
-          <div key={bug._id}>
-            <p>{bug.title}</p>
-            <p>{bug.severity}</p>
-          </div>
-        ))}
-      </div>
-    </div>
-  )
+  return <BugTracker />
 }
 
 export default TrackerPage

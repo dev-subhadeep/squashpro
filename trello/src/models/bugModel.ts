@@ -24,6 +24,6 @@ const bugSchema = new mongoose.Schema(
   { timestamps: true }
 )
 
-const Bug = mongoose.models.bugs || mongoose.model("Bug", bugSchema)
+const Bug = mongoose.models.bugs ?? mongoose.model("bugs", bugSchema)
 
 export default Bug
