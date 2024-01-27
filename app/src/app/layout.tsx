@@ -19,7 +19,9 @@ export default function RootLayout({
     <html lang="en">
       <body className="flex flex-row">
         <SideMenu />
-        <div className="ml-[90px]">{children}</div>
+        <div className="ml-[90px] w-full flex flex-col justify-center">
+          {children}
+        </div>
       </body>
     </html>
   )

@@ -3,6 +3,8 @@
 import React, { useState } from "react"
 import axios from "axios"
 import { useRouter } from "next/navigation"
+import { Input } from "@/components/ui/input"
+import { Button } from "@/components/ui/button"
 
 const LoginPage = () => {
   const [email, setEmail] = useState("")
@@ -20,15 +22,15 @@ const LoginPage = () => {
       .catch((error) => console.log(error))
   }
   return (
-    <div>
-      <h1>Login</h1>
-      <div>
-        <form onSubmit={handleLogin}>
+    <div className="container flex flex-col justify-center items-center gap-2 h-screen">
+      <h1 className="text-2xl">Log In</h1>
+      <div className="border border-slate-200 w-[600px] mx-auto p-5 rounded-lg">
+        <form onSubmit={handleLogin} className="flex flex-col gap-2">
           <div>
             <label htmlFor="email">Email</label>
           </div>
           <div>
-            <input
+            <Input
               type="email"
               id="email"
               value={email}
@@ -39,15 +41,18 @@ const LoginPage = () => {
             <label htmlFor="password">Password</label>
           </div>
           <div>
-            <input
+            <Input
               type="password"
               value={password}
               id="password"
               onChange={(e) => setPassword(e.target.value)}
             />
           </div>
-          <div>
-            <button type="submit">Login</button>
+
+          <div className="my-2">
+            <Button className="bg-[#615EF0]" type="submit">
+              Login
+            </Button>
           </div>
         </form>
       </div>
