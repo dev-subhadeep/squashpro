@@ -21,10 +21,7 @@ export async function POST(request: NextRequest) {
       source,
       raised_by,
     })
-    return NextResponse.json(
-      { message: "Bug reported successfully", bug },
-      { status: 201 }
-    )
+    return NextResponse.json({ message: "Bug reported!", bug }, { status: 201 })
   } catch (error: any) {
     return NextResponse.json({ error: error.message }, { status: 500 })
   }

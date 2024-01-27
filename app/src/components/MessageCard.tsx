@@ -2,9 +2,9 @@ import React from "react"
 import SampleImage from "../../public/sample/rachael.jpg"
 import Image from "next/image"
 
-const MessageCard = () => {
+const MessageCard = ({ text, me = true }: { text: string; me: boolean }) => {
   return (
-    <div className="flex flex-row gap-4">
+    <div className={"flex gap-4 " + me ? "flex-row-reverse" : "flex-row"}>
       <div>
         <Image
           src={SampleImage}
@@ -15,9 +15,7 @@ const MessageCard = () => {
         />
       </div>
       <div>
-        <p className="bg-gray-100 rounded-lg p-4 max-w-[200px]">
-          Lorem ipsum, dolor sit amet consectetur adipisicing elit. Error, odio.
-        </p>
+        <p className="bg-gray-100 rounded-lg p-4 max-w-[200px]">{text}</p>
       </div>
     </div>
   )

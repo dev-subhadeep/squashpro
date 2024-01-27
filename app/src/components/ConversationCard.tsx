@@ -1,34 +1,61 @@
 import axios from "axios"
 import Image from "next/image"
-import React, { useEffect, useState } from "react"
+import React, { useContext, useEffect, useState } from "react"
 import SampleImage from "../../public/sample/rachael.jpg"
+import { ChatContext } from "@/context/ChatContext"
 
-type ConvoCard = {
-  id: string
-  active?: boolean
-}
-
-type User = {
-  _id: string
-  name: string
-  avatar?: string
-}
-
-const ConversationCard = ({ id, active }: ConvoCard) => {
-  const [user, setUser] = useState<User | null>(null)
+const ConversationCard = ({ conversation }: { conversation: any }) => {
+  const { me, setCurrentUser } = useContext(ChatContext)
+  const friendId = conversation.members.find((member) => member._id !== me.id)
+  const [friend, setFriend] = useState()
 
   useEffect(() => {
     axios
-      .get(`/api/user/${id}`)
-      .then((res) => setUser(res.data))
+      .get(`/api/user/${friendId}`)
+      .then((res) => setFriend(res.data))
       .catch((err) => console.log(err))
-  }, [id])
-
-  const css = active ? " bg-slate-100" : ""
+  }, [me])
 
   return (
     <div
+      className={"flex flex-row gap-4 rounded-2xl p-4 hover:bg-slate-100"}
+      onClick={() => setCurrentUser(friendId)}
+    >
+      <div>
+        {friend?.avatar ? (
+          <Image
+            src={friend.avatar}
+            alt={friend.name}
+            height={48}
+            width={48}
+            className="rounded-full"
+          />
+        ) : (
+          <Image
+            src={SampleImage}
+            alt="No avatar"
+            height={48}
+            width={48}
+            className="rounded-full"
+          />
+        )}
+      </div>
+      <div>
+        <h1 className="font-bold">{friend?.name}</h1>
+      </div>
+      <div>
+        <p className="text-slate-400 font-bold">12 min</p>
+      </div>
+    </div>
+  )
+}
+
+export default ConversationCard
+
+{
+  /* <div
       className={"flex flex-row gap-4 rounded-2xl p-4 hover:bg-slate-100" + css}
+      onClick={() => console.log("clicked")}
     >
       <div>
         {user?.avatar ? (
@@ -52,9 +79,8 @@ const ConversationCard = ({ id, active }: ConvoCard) => {
       <div>
         <h1 className="font-bold">{user?.name}</h1>
       </div>
-      <div>{/* <p className="text-slate-400 font-bold">12 min</p> */}</div>
-    </div>
-  )
+      <div>
+        <p className="text-slate-400 font-bold">12 min</p>
+      </div>
+    </div> */
 }
-
-export default ConversationCard

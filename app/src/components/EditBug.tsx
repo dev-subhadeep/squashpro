@@ -1,7 +1,7 @@
 "use client"
 
 import axios from "axios"
-import React, { useContext, useState } from "react"
+import React, { useContext, useEffect, useState } from "react"
 import { useRouter, useSearchParams } from "next/navigation"
 import { Input } from "./ui/input"
 import { Textarea } from "./ui/textarea"
@@ -14,16 +14,29 @@ type TUser = {
   email: string
 }
 
-const ReportNewBug = () => {
+const EditBug = () => {
   const [title, setTitle] = useState("")
   const [description, setDescription] = useState("")
   // const [severity, setSeverity] = useState("")
   const searchParams = useSearchParams()
-  const severity = searchParams.get("severity")
+  const id = searchParams.get("id")
   const [source, setSource] = useState("")
   const [isUploading, setIsUploading] = useState(false)
+  const [isLoading, setIsLoading] = useState(true)
 
   const router = useRouter()
+
+  useEffect(() => {
+    axios
+      .get(`/api/bugs/${id}`)
+      .then((res) => {
+        setTitle(res?.data.title)
+        setDescription(res?.data.description)
+        setSource(res?.data.source)
+      })
+      .catch((err) => console.log(err))
+      .finally(() => setIsLoading(false))
+  }, [])
 
   //Cloudinary
   const preset_key = process.env.CLOUDINARY_UPLOAD_PRESET!
@@ -33,22 +46,24 @@ const ReportNewBug = () => {
 
   const handleFormSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
+    setIsLoading(true)
     try {
       const response = await axios.get("/api/user")
       const user = await response.data
       const data = {
         title,
         description,
-        severity,
         source,
         raised_by: user.id,
       }
       const bugRes = await axios.post("/api/bugs", data)
+      setIsLoading(false)
       toast(bugRes.data.message)
 
       router.push("/tracker")
     } catch (error: any) {
       console.log(error)
+      setIsLoading(false)
     }
   }
 
@@ -67,6 +82,8 @@ const ReportNewBug = () => {
       .catch((error) => console.log(error.message))
       .finally(() => setIsUploading(false))
   }
+
+  if (isLoading) return <h1 className="text-2xl">Loading</h1>
 
   return (
     <div className="container flex flex-col justify-center items-center gap-2 h-screen">
@@ -96,7 +113,7 @@ const ReportNewBug = () => {
           </div>
 
           <div>
-            <label htmlFor="">Upload Reference Vide/Image</label>
+            <label htmlFor="">Upload Reference Video/Image</label>
           </div>
           <div>
             <Input type="file" onChange={handleMediaUpload} />
@@ -107,7 +124,7 @@ const ReportNewBug = () => {
               disabled={isUploading}
               type="submit"
             >
-              Submit Report
+              Update Report
             </Button>
           </div>
         </form>
@@ -116,4 +133,4 @@ const ReportNewBug = () => {
   )
 }
 
-export default ReportNewBug
+export default EditBug
