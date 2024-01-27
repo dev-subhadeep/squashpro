@@ -56,7 +56,7 @@ const EditBug = () => {
         source,
         raised_by: user.id,
       }
-      const bugRes = await axios.post("/api/bugs", data)
+      const bugRes = await axios.patch(`/api/bugs/${id}`, data)
       setIsLoading(false)
       toast(bugRes.data.message)
 
