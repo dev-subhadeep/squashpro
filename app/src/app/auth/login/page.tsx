@@ -5,6 +5,8 @@ import axios from "axios"
 import { useRouter } from "next/navigation"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
+import { toast } from "sonner"
+import Link from "next/link"
 
 const LoginPage = () => {
   const [email, setEmail] = useState("")
@@ -16,8 +18,8 @@ const LoginPage = () => {
     axios
       .post(`/api/login`, { email, password })
       .then((response) => {
-        console.log(response.data)
-        router.push("/")
+        toast(response.data.message)
+        router.push("/tracker")
       })
       .catch((error) => console.log(error))
   }
@@ -52,7 +54,11 @@ const LoginPage = () => {
           <div className="my-2">
             <Button className="bg-[#615EF0]" type="submit">
               Login
-            </Button>
+            </Button>{" "}
+            &nbsp; Don't have an account?{" "}
+            <Link href="/auth/register" className="text-[#615EF0]">
+              Register
+            </Link>
           </div>
         </form>
       </div>

@@ -5,6 +5,8 @@ import axios from "axios"
 import { useRouter } from "next/navigation"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
+import { toast } from "sonner"
+import Link from "next/link"
 
 const RegisterPage = () => {
   const [name, setName] = useState("")
@@ -38,7 +40,7 @@ const RegisterPage = () => {
     axios
       .post("/api/register", { name, email, password, avatar })
       .then((response) => {
-        console.log(response.data)
+        toast(response.data.message)
         router.push("/auth/login")
       })
       .catch((error) => console.log(error))
@@ -94,7 +96,11 @@ const RegisterPage = () => {
               type="submit"
             >
               Register
-            </Button>
+            </Button>{" "}
+            &nbsp; Already have an account?{" "}
+            <Link href="/auth/login" className="text-[#615EF0]">
+              Sign in
+            </Link>
           </div>
         </form>
       </div>

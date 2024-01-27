@@ -2,7 +2,11 @@
 
 import axios from "axios"
 import React, { useContext, useState } from "react"
-import { useSearchParams } from "next/navigation"
+import { useRouter, useSearchParams } from "next/navigation"
+import { Input } from "./ui/input"
+import { Textarea } from "./ui/textarea"
+import { Button } from "./ui/button"
+import { toast } from "sonner"
 
 type TUser = {
   id: string
@@ -18,6 +22,8 @@ const ReportNewBug = () => {
   const severity = searchParams.get("severity")
   const [source, setSource] = useState("")
   const [isUploading, setIsUploading] = useState(false)
+
+  const router = useRouter()
 
   //Cloudinary
   const preset_key = process.env.CLOUDINARY_UPLOAD_PRESET!
@@ -37,12 +43,10 @@ const ReportNewBug = () => {
         source,
         raised_by: user.id,
       }
-      const postBugReportResponse = await axios.post("/api/bugs", data)
-      console.log(postBugReportResponse)
-      setTitle("")
-      setDescription("")
-      // setSeverity("")
-      setSource("")
+      const bugRes = await axios.post("/api/bugs", data)
+      toast(bugRes.data.message)
+
+      router.push("/tracker")
     } catch (error: any) {
       console.log(error)
     }
@@ -65,7 +69,57 @@ const ReportNewBug = () => {
   }
 
   return (
-    <div>
+    <div className="container flex flex-col justify-center items-center gap-2 h-screen">
+      <h1 className="text-2xl">Report New Bug</h1>
+      <div className="border border-slate-200 w-[600px] mx-auto p-5 rounded-lg">
+        <form onSubmit={handleFormSubmit} className="flex flex-col gap-2">
+          <div>
+            <label htmlFor="title">Title</label>
+          </div>
+          <div>
+            <Input
+              type="text"
+              id="title"
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
+            />
+          </div>
+          <div>
+            <label htmlFor="description">Description</label>
+          </div>
+          <div>
+            <Textarea
+              id="description"
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+            />
+          </div>
+
+          <div>
+            <label htmlFor="">Upload Reference Vide/Image</label>
+          </div>
+          <div>
+            <Input type="file" onChange={handleMediaUpload} />
+          </div>
+          <div className="my-2">
+            <Button
+              className="bg-[#615EF0]"
+              disabled={isUploading}
+              type="submit"
+            >
+              Submit Report
+            </Button>
+          </div>
+        </form>
+      </div>
+    </div>
+  )
+}
+
+export default ReportNewBug
+
+{
+  /* <div>
       <h1>Report New Bug</h1>
       <form onSubmit={handleFormSubmit}>
         <input
@@ -80,17 +134,7 @@ const ReportNewBug = () => {
           onChange={(e) => setDescription(e.target.value)}
         ></textarea>
 
-        {/* <select
-          value={severity}
-          id="severity"
-          onChange={(e) => setSeverity(e.target.value)}
-        >
-          <option value="">Choose Severity</option>
-          <option value="Critical">Critical</option>
-          <option value="Major">Major</option>
-          <option value="Medium">Medium</option>
-          <option value="Low">Low</option>
-        </select> */}
+        
         <div>
           <div>
             <button>
@@ -111,8 +155,5 @@ const ReportNewBug = () => {
         </div>
       </form>
       <div>{source && <img src={source} />}</div>
-    </div>
-  )
+    </div> */
 }
-
-export default ReportNewBug
