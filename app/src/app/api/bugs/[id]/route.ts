@@ -38,9 +38,13 @@ export async function PATCH(
   route: { params: { id: string } }
 ) {
   try {
+    const data = await request.json()
     const bug = await Bug.findById(route.params.id)
     if (bug) {
-      await Bug.findByIdAndUpdate({ _id: route.params.id }, { ...request.body })
+      await Bug.findByIdAndUpdate(
+        { _id: route.params.id },
+        { $set: { ...data } }
+      )
       return NextResponse.json(
         { message: "Bug report updated." },
         { status: 200 }
